@@ -1,10 +1,15 @@
+# AixrTensor
 
-## Usage
+AixrTensor is a simple deep learning library built from scratch using NumPy. It includes basic tensor operations, automatic differentiation, and some neural network layers.
 
+#Requirements
+Numpy
+
+#Usage
 Here is an example of how to use AixrTensor to create a simple neural network:
 
 ```python
-from AixrTensorClass import Tensor, Linear, ReLU, SGD
+from AixrTensor import Tensor, Linear, ReLU, SGD
 
 # Training data
 x = Tensor([[1, 2], [2, 3], [3, 4], [4, 5]], requires_grad=True)
