@@ -4,11 +4,11 @@
 
 -Requirements
 
-- Numpy
+ - Numpy
 
 -Usage
 
-- Here is an example of how to use AixrTensor to create a simple neural network:
+ - Here is an example of how to use AixrTensor to create a simple neural network:
 
 ```python
 from AixrTensor import Tensor, Linear, ReLU, SGD
