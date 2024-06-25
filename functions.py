@@ -1,5 +1,5 @@
 import numpy as np
-from .tensor import Tensor
+from tensor import Tensor
 
 class Function:
     def __init__(self):
