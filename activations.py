@@ -1,6 +1,6 @@
 import numpy as np
-from tensor import Tensor
-from functions import Function
+from .tensor import Tensor
+from .functions import Function
 
 class ReLU(Function):
     @staticmethod
