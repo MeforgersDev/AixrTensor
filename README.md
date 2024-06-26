@@ -1,17 +1,13 @@
 # AixrTensor
 
- - AixrTensor is a simple deep learning library built from scratch using NumPy. It includes basic tensor operations, automatic differentiation, and some neural network layers.
-
-# Requirements
-
- - Numpy
+ - This framework is a powerful tool for understanding, developing, and optimizing deep learning models. Its flexible structure makes it suitable for various research and development projects. It is also an excellent resource for those who want to grasp the fundamentals of deep learning algorithms. With GitHub integration, you can easily share and collaborate on your project.
 
 # Usage
 
  - Here is an example of how to use AixrTensor to create a simple neural network:
 
 ```python
-from my_ai_framework import Tensor, Linear, ReLU, Aixr, NeuralNetwork
+from AixrTensor import Tensor, Linear, ReLU, Aixr, NeuralNetwork
 
 # Create a simple model
 model = NeuralNetwork([
@@ -22,7 +18,7 @@ model = NeuralNetwork([
 
 # Define a loss function and optimizer
 criterion = ...  # Define your loss function here
-optimizer = Aixr(model.parameters(), lr=0.01)
+optimizer = Aixr(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, power=2)
 
 # Train the model
 def train(model, optimizer, data_loader, epochs=10):
@@ -39,6 +35,9 @@ def train(model, optimizer, data_loader, epochs=10):
 
             print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.data}')
 
-# Example data loader and training loop
-# data_loader = ...  # Define your data loader here
-# train(model, optimizer, data_loader, epochs=10
+# Example data_loader and criterion definitions
+# data_loader = ...
+# criterion = ...
+
+# Training process
+train(model, optimizer, data_loader, epochs=10)
