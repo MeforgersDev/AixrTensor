@@ -11,33 +11,34 @@
  - Here is an example of how to use AixrTensor to create a simple neural network:
 
 ```python
-from AixrTensor import Tensor, Linear, ReLU, SGD
+from my_ai_framework import Tensor, Linear, ReLU, Aixr, NeuralNetwork
 
-# Training data
-x = Tensor([[1, 2], [2, 3], [3, 4], [4, 5]], requires_grad=True)
-y = Tensor([[3], [5], [7], [9]], requires_grad=False)
+# Create a simple model
+model = NeuralNetwork([
+    Linear(2, 4),
+    ReLU(),
+    Linear(4, 1)
+])
 
-# Model and optimizer
-linear_layer = Linear(2, 1)
-relu = ReLU()
-optimizer = SGD([linear_layer.weights, linear_layer.bias], lr=0.01)
+# Define a loss function and optimizer
+criterion = ...  # Define your loss function here
+optimizer = Aixr(model.parameters(), lr=0.01)
 
-# Training loop
-for epoch in range(1000):
-    y_pred = linear_layer(x)
-    y_pred = relu(y_pred)
-    loss = Tensor(np.mean((y_pred.data - y.data) ** 2))
+# Train the model
+def train(model, optimizer, data_loader, epochs=10):
+    for epoch in range(epochs):
+        for inputs, targets in data_loader:
+            # Forward pass
+            outputs = model.forward(inputs)
+            loss = criterion(outputs, targets)
 
-    # Backward pass
-    loss.backward()
+            # Backward pass
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-    # Optimization step
-    optimizer.step()
-    optimizer.zero_grad()
+            print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.data}')
 
-    if epoch % 100 == 0:
-        print(f'Epoch {epoch}, Loss: {loss.data}')
-
-# Prediction
-y_pred = linear_layer(x)
-print(f'Predicted: {y_pred.data}')
+# Example data loader and training loop
+# data_loader = ...  # Define your data loader here
+# train(model, optimizer, data_loader, epochs=10
