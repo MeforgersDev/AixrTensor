@@ -1,6 +1,6 @@
 # AixrTensor
 
- -Aixr Tensor is a powerful and flexible deep learning framework designed to optimize neural network training and inference. By leveraging dynamic device management, advanced optimization techniques, and custom functions, Aixr Tensor aims to provide an efficient and user-friendly environment for deep learning practitioners.
+ - Aixr Tensor is a powerful and flexible deep learning framework designed to optimize neural network training and inference. By leveraging dynamic device management, advanced optimization techniques, and custom functions, Aixr Tensor aims to provide an efficient and user-friendly environment for deep learning practitioners.
 
 # Usage
 
