@@ -1,3 +1,4 @@
+# model.py
 class NeuralNetwork:
     def __init__(self, layers):
         self.layers = layers
@@ -33,3 +34,10 @@ class NeuralNetwork:
         import pickle
         with open(path, 'rb') as f:
             return pickle.load(f)
+
+    def process_important_data(self, important_func):
+        for param in self.parameters():
+            if important_func and important_func(param.data):
+                param.to('gpu')
+            else:
+                param.to('cpu')
