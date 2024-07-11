@@ -14,6 +14,22 @@ class NeuralNetwork:
     def parameters(self):
         params = []
         for layer in self.layers:
-            if isinstance(layer, Linear):
-                params.extend([layer.weights, layer.bias])
+            if hasattr(layer, 'parameters'):
+                params.extend(layer.parameters())
         return params
+
+    def to(self, device):
+        for layer in self.layers:
+            if hasattr(layer, 'to'):
+                layer.to(device)
+
+    def save_model(self, path):
+        import pickle
+        with open(path, 'wb') as f:
+            pickle.dump(self, f)
+
+    @staticmethod
+    def load_model(path):
+        import pickle
+        with open(path, 'rb') as f:
+            return pickle.load(f)
