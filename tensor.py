@@ -1,3 +1,5 @@
+import numpy as np
+
 class Tensor:
     def __init__(self, data, requires_grad=False, dtype=np.float32, device='cpu'):
         self.device = device
@@ -46,12 +48,20 @@ class Tensor:
         else:
             self.data = np.array(self._original_data)
 
-    def mixed_device_operation(self, threshold=0.8):
+    def mixed_device_operation(self, threshold=0.8, custom_func=None):
         import psutil
         ram_usage = psutil.virtual_memory().percent
-        if ram_usage > threshold * 100:
+        if custom_func:
+            custom_func(self, ram_usage)
+        elif ram_usage > threshold * 100:
             self.save_to_ram()
             self.to('gpu')
         else:
             self.load_from_ram()
+            self.to('cpu')
+
+    def process_important_data(self, is_important_func):
+        if is_important_func(self.data):
+            self.to('gpu')
+        else:
             self.to('cpu')
