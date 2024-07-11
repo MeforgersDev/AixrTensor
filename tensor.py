@@ -1,12 +1,15 @@
-import numpy as np
-
 class Tensor:
     def __init__(self, data, requires_grad=False, dtype=np.float32, device='cpu'):
-        self.data = np.array(data, dtype=dtype)
+        self.device = device
+        if self.device == 'gpu':
+            import cupy as cp
+            self.data = cp.array(data, dtype=dtype)
+        else:
+            self.data = np.array(data, dtype=dtype)
         self.requires_grad = requires_grad
         self.grad = None
         self._grad_fn = None
-        self.device = device
+        self._original_data = self.data
 
     def __repr__(self):
         return f"Tensor({self.data}, requires_grad={self.requires_grad}, device={self.device})"
@@ -25,10 +28,30 @@ class Tensor:
         return MatMul.apply(self, other)
 
     def to(self, device):
+        self.device = device
         if device == 'gpu':
             import cupy as cp
-            self.data = cp.array(self.data)
+            self.data = cp.array(self._original_data)
         else:
-            self.data = np.array(self.data)
-        self.device = device
+            self.data = np.array(self._original_data)
         return self
+
+    def save_to_ram(self):
+        self._original_data = np.array(self.data)
+
+    def load_from_ram(self):
+        if self.device == 'gpu':
+            import cupy as cp
+            self.data = cp.array(self._original_data)
+        else:
+            self.data = np.array(self._original_data)
+
+    def mixed_device_operation(self, threshold=0.8):
+        import psutil
+        ram_usage = psutil.virtual_memory().percent
+        if ram_usage > threshold * 100:
+            self.save_to_ram()
+            self.to('gpu')
+        else:
+            self.load_from_ram()
+            self.to('cpu')
