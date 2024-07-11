@@ -1,43 +1,47 @@
 # AixrTensor
 
- - This framework is a powerful tool for understanding, developing, and optimizing deep learning models. Its flexible structure makes it suitable for various research and development projects. It is also an excellent resource for those who want to grasp the fundamentals of deep learning algorithms. With GitHub integration, you can easily share and collaborate on your project.
+ -Aixr Tensor is a powerful and flexible deep learning framework designed to optimize neural network training and inference. By leveraging dynamic device management, advanced optimization techniques, and custom functions, Aixr Tensor aims to provide an efficient and user-friendly environment for deep learning practitioners.
 
 # Usage
 
  - Here is an example of how to use AixrTensor to create a simple neural network:
 
 ```python
-from AixrTensor import Tensor, Linear, ReLU, Aixr, NeuralNetwork
+import numpy as np
+from tensor import Tensor
+from optim import Aixr
+from model import NeuralNetwork
+from custom_functions import example_custom_func, example_important_func
 
-# Create a simple model
-model = NeuralNetwork([
-    Linear(2, 4),
-    ReLU(),
-    Linear(4, 1)
-])
+# Define model layers (example)
+layers = [
+    # Add layers here, e.g., Linear, ReLU
+]
 
-# Define a loss function and optimizer
-criterion = ...  # Define your loss function here
-optimizer = Aixr(model.parameters(), lr=0.01, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, power=2)
+# Create NeuralNetwork instance
+model = NeuralNetwork(layers)
 
-# Train the model
-def train(model, optimizer, data_loader, epochs=10):
-    for epoch in range(epochs):
-        for inputs, targets in data_loader:
-            # Forward pass
-            outputs = model.forward(inputs)
-            loss = criterion(outputs, targets)
+# Define optimizer with custom functions
+optimizer = Aixr(model.parameters(), lr=0.001, custom_func=example_custom_func, important_func=example_important_func)
 
-            # Backward pass
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+# Training loop
+for epoch in range(epochs):
+    # Forward pass
+    output = model.forward(input_data)
+    
+    # Calculate loss
+    loss = loss_function(output, target_data)
+    
+    # Backward pass
+    model.backward(loss.gradient())
+    
+    # Optimization step
+    optimizer.step()
+    
+    # Zero gradients
+    optimizer.zero_grad()
 
-            print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.data}')
+    # Process important data
+    model.process_important_data(example_important_func)
 
-# Example data_loader and criterion definitions
-# data_loader = ...
-# criterion = ...
 
-# Training process
-train(model, optimizer, data_loader, epochs=10)
