@@ -3,7 +3,10 @@ import numpy as np
 class Tensor:
     def __init__(self, data, requires_grad=False, dtype=np.float32, device='cpu'):
         self.device = device
-        if self.device == 'gpu':
+        if self.device == 'tpu':
+            import jax.numpy as jnp
+            self.data = jnp.array(data, dtype=dtype)
+        elif self.device == 'gpu':
             import cupy as cp
             self.data = cp.array(data, dtype=dtype)
         else:
@@ -31,7 +34,10 @@ class Tensor:
 
     def to(self, device):
         self.device = device
-        if device == 'gpu':
+        if device == 'tpu':
+            import jax.numpy as jnp
+            self.data = jnp.array(self._original_data)
+        elif device == 'gpu':
             import cupy as cp
             self.data = cp.array(self._original_data)
         else:
@@ -42,7 +48,10 @@ class Tensor:
         self._original_data = np.array(self.data)
 
     def load_from_ram(self):
-        if self.device == 'gpu':
+        if self.device == 'tpu':
+            import jax.numpy as jnp
+            self.data = jnp.array(self._original_data)
+        elif self.device == 'gpu':
             import cupy as cp
             self.data = cp.array(self._original_data)
         else:
