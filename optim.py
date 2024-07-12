@@ -16,7 +16,7 @@ class SGD:
             param.grad = None
 
 class Aixr:
-    def __init__(self, parameters, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, power=2, threshold=0.8, custom_func=None, important_func=None):
+    def __init__(self, parameters, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, power=2, threshold=0.8, custom_func=None, important_func=None, detailed_processing_func=None, use_tpu=False):
         self.parameters = parameters
         self.lr = lr
         self.betas = betas
@@ -29,6 +29,14 @@ class Aixr:
         self.threshold = threshold
         self.custom_func = custom_func
         self.important_func = important_func
+        self.detailed_processing_func = detailed_processing_func
+        self.use_tpu = use_tpu
+
+        if use_tpu:
+            import jax
+            self.device = jax.devices('tpu')[0]
+        else:
+            self.device = 'cpu'
 
     def step(self):
         self.t += 1
@@ -38,9 +46,11 @@ class Aixr:
             if param.requires_grad and param.grad is not None:
                 if self.important_func and self.important_func(param.data):
                     param.to('gpu')
+                    if self.detailed_processing_func:
+                        self.detailed_processing_func(param.data)
                 else:
                     param.mixed_device_operation(self.threshold, self.custom_func)
-                    
+                
                 # Apply weight decay
                 param.data -= self.weight_decay * param.data
                 
@@ -64,7 +74,7 @@ class Aixr:
             param.grad = None
 
 class AdamW:
-    def __init__(self, parameters, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, custom_func=None, important_func=None):
+    def __init__(self, parameters, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, custom_func=None, important_func=None, detailed_processing_func=None, use_tpu=False):
         self.parameters = parameters
         self.lr = lr
         self.betas = betas
@@ -75,6 +85,14 @@ class AdamW:
         self.t = 0
         self.custom_func = custom_func
         self.important_func = important_func
+        self.detailed_processing_func = detailed_processing_func
+        self.use_tpu = use_tpu
+
+        if use_tpu:
+            import jax
+            self.device = jax.devices('tpu')[0]
+        else:
+            self.device = 'cpu'
 
     def step(self):
         self.t += 1
@@ -84,6 +102,8 @@ class AdamW:
             if param.requires_grad and param.grad is not None:
                 if self.important_func and self.important_func(param.data):
                     param.to('gpu')
+                    if self.detailed_processing_func:
+                        self.detailed_processing_func(param.data)
                 else:
                     param.mixed_device_operation(self.threshold, self.custom_func)
                 
@@ -99,7 +119,7 @@ class AdamW:
             param.grad = None
 
 class LAMB:
-    def __init__(self, parameters, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, custom_func=None, important_func=None):
+    def __init__(self, parameters, lr=0.001, betas=(0.9, 0.999), eps=1e-8, weight_decay=0.01, custom_func=None, important_func=None, detailed_processing_func=None, use_tpu=False):
         self.parameters = parameters
         self.lr = lr
         self.betas = betas
@@ -110,6 +130,14 @@ class LAMB:
         self.t = 0
         self.custom_func = custom_func
         self.important_func = important_func
+        self.detailed_processing_func = detailed_processing_func
+        self.use_tpu = use_tpu
+
+        if use_tpu:
+            import jax
+            self.device = jax.devices('tpu')[0]
+        else:
+            self.device = 'cpu'
 
     def step(self):
         self.t += 1
@@ -119,6 +147,8 @@ class LAMB:
             if param.requires_grad and param.grad is not None:
                 if self.important_func and self.important_func(param.data):
                     param.to('gpu')
+                    if self.detailed_processing_func:
+                        self.detailed_processing_func(param.data)
                 else:
                     param.mixed_device_operation(self.threshold, self.custom_func)
                 
