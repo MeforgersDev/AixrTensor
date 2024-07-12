@@ -1,3 +1,4 @@
+# tensor.py
 import numpy as np
 
 class Tensor:
@@ -6,11 +7,14 @@ class Tensor:
         if self.device == 'tpu':
             import jax.numpy as jnp
             self.data = jnp.array(data, dtype=dtype)
+            self.platform = jax.devices('tpu')[0]
         elif self.device == 'gpu':
             import cupy as cp
             self.data = cp.array(data, dtype=dtype)
+            self.platform = 'gpu'
         else:
             self.data = np.array(data, dtype=dtype)
+            self.platform = 'cpu'
         self.requires_grad = requires_grad
         self.grad = None
         self._grad_fn = None
@@ -69,8 +73,10 @@ class Tensor:
             self.load_from_ram()
             self.to('cpu')
 
-    def process_important_data(self, is_important_func):
+    def process_important_data(self, is_important_func, detailed_processing_func=None):
         if is_important_func(self.data):
             self.to('gpu')
+            if detailed_processing_func:
+                detailed_processing_func(self.data)
         else:
             self.to('cpu')
