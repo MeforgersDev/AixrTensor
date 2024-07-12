@@ -11,7 +11,7 @@ import numpy as np
 from tensor import Tensor
 from optim import Aixr
 from model import NeuralNetwork
-from custom_functions import example_custom_func, example_important_func
+from custom_functions import example_custom_func, example_important_func, example_detailed_processing_func
 
 # Define model layers (example)
 layers = [
@@ -21,8 +21,8 @@ layers = [
 # Create NeuralNetwork instance
 model = NeuralNetwork(layers)
 
-# Define optimizer with custom functions
-optimizer = Aixr(model.parameters(), lr=0.001, custom_func=example_custom_func, important_func=example_important_func)
+# Define optimizer with custom functions and TPU support
+optimizer = Aixr(model.parameters(), lr=0.001, custom_func=example_custom_func, important_func=example_important_func, detailed_processing_func=example_detailed_processing_func, use_tpu=True)
 
 # Training loop
 for epoch in range(epochs):
@@ -42,6 +42,7 @@ for epoch in range(epochs):
     optimizer.zero_grad()
 
     # Process important data
-    model.process_important_data(example_important_func)
+    model.process_important_data(example_important_func, example_detailed_processing_func)
+
 
 
